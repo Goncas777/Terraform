@@ -1,7 +1,4 @@
-# --- Secret de credenciais já deve existir em backend.tf ---
-# kubernetes_secret.database_credentials
 
-# StatefulSet PostgreSQL
 resource "kubernetes_stateful_set" "postgres" {
   metadata {
     name      = "postgres"

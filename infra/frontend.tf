@@ -1,5 +1,3 @@
-# Namespace is assumed to exist (kubernetes_namespace.app)
-
 # 1️⃣ ConfigMap para Nginx
 resource "kubernetes_config_map_v1" "frontend_nginx_config" {
   metadata {

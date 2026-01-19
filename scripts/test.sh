@@ -19,3 +19,5 @@ kubectl exec -it -n app "$FRONTEND_POD" -- curl -s -X POST http://api:8000/regis
 
 echo
 echo "Teste concluído!"
+
+kubectl port-forward svc/frontend-service -n app 8080:3000

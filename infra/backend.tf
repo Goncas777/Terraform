@@ -25,9 +25,6 @@ resource "kubernetes_secret" "database_credentials" {
   }
 }
 
-# --- Secret já existente: kubernetes_secret.database_credentials ---
-
-# Deployment do backend/API
 resource "kubernetes_deployment" "api" {
   metadata {
     name      = "api"
