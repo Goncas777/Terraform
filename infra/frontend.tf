@@ -13,19 +13,39 @@ server {
     listen 80;
     server_name localhost;
 
-    location / {
-        root /usr/share/nginx/html;
-        index index.html;
-        try_files \$uri \$uri/ /index.html;
-    }
+    # Definir tipos MIME
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
 
+    # Proxy para API - PRIORITY 1 (exact path match, highest priority)
     location /api/ {
         proxy_pass http://api:8000/;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
     }
 
+    # Servir arquivos estáticos - PRIORITY 2 (regex match)
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|html|json)$$ {
+        root /usr/share/nginx/html;
+        expires 1d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Servir raiz - PRIORITY 3 (root location)
+    location = / {
+        root /usr/share/nginx/html;
+        try_files /index.html =404;
+    }
+
+    # Servir frontend SPA para subpastas - PRIORITY 4
+    location / {
+        root /usr/share/nginx/html;
+        try_files \$uri \$uri/ /index.html;
+    }
+
+    # Páginas de erro
     error_page 500 502 503 504 /50x.html;
     location = /50x.html {
         root /usr/share/nginx/html;

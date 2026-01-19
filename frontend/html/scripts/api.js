@@ -44,8 +44,6 @@ export async function registerUser(name, email, password) {
       name,
       email,
       password,
-      funds: 0,
-      role: "player",
     }),
   });
 

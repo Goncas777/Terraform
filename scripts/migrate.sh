@@ -8,6 +8,7 @@ kubectl wait --for=condition=ready pod -n app --selector=app=postgres --timeout=
 BACKEND_POD=$(kubectl get pods -n app -l app=api -o jsonpath='{.items[0].metadata.name}')
 
 # Executa as migrations dentro do pod do backend
-kubectl exec -it "$BACKEND_POD" -n app -- poetry run alembic -c backend/alembic.ini upgrade head
+kubectl exec -it -n app "$BACKEND_POD" -- \
+  bash -c "cd /app && poetry run alembic -c backend/alembic.ini upgrade head"
 
 echo "Migrations concluídas!"
